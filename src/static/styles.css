@@ -267,6 +267,99 @@ section h3 {
   align-items: center;
 }
 
+/* Social sharing buttons */
+.social-share-container {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+}
+
+.share-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.share-button:hover {
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.share-button:active {
+  transform: translateY(-1px) scale(1.05);
+}
+
+.share-button.twitter {
+  background: linear-gradient(135deg, #1DA1F2, #0d8bd9);
+  color: white;
+}
+
+.share-button.facebook {
+  background: linear-gradient(135deg, #4267B2, #365899);
+  color: white;
+}
+
+.share-button.email {
+  background: linear-gradient(135deg, #EA4335, #c5221f);
+  color: white;
+}
+
+.share-button.copy-link {
+  background: linear-gradient(135deg, #34A853, #2d8f47);
+  color: white;
+}
+
+.share-button.twitter:hover {
+  background: linear-gradient(135deg, #0d8bd9, #0a7bc2);
+}
+
+.share-button.facebook:hover {
+  background: linear-gradient(135deg, #365899, #2d4a7f);
+}
+
+.share-button.email:hover {
+  background: linear-gradient(135deg, #c5221f, #a01a17);
+}
+
+.share-button.copy-link:hover {
+  background: linear-gradient(135deg, #2d8f47, #26753b);
+}
+
+/* Copy confirmation tooltip */
+.copy-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(33, 33, 33, 0.95);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  margin-bottom: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.copy-tooltip.show {
+  opacity: 1;
+}
+
 /* Buttons */
 .register-button {
   background: linear-gradient(145deg, var(--secondary), var(--secondary-dark));
