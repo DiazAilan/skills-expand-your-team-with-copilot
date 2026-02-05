@@ -908,8 +908,13 @@ document.addEventListener("DOMContentLoaded", () => {
         
       case "copy":
         // Copy link to clipboard
-        const escapedActivityName = CSS.escape(activityName);
-        const copyButton = document.querySelector(`[data-activity="${escapedActivityName}"][data-share-type="copy"]`);
+        // Use attribute selector with exact match - no escaping needed for attribute values
+        const copyButton = document.querySelector(`button[data-activity="${activityName}"][data-share-type="copy"]`);
+        if (!copyButton) {
+          console.error("Copy button not found for activity:", activityName);
+          showMessage("Failed to copy link to clipboard", "error");
+          break;
+        }
         navigator.clipboard.writeText(shareUrl).then(() => {
           // Find the tooltip element within the button
           const tooltip = copyButton.querySelector(".copy-tooltip");
