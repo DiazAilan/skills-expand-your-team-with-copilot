@@ -32,7 +32,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Theme toggle functionality
   function initializeTheme() {
     // Check for saved theme preference or default to light mode
-    const savedTheme = localStorage.getItem("theme") || "light";
+    let savedTheme = "light";
+    try {
+      savedTheme = localStorage.getItem("theme") || "light";
+    } catch (error) {
+      console.error("Failed to access localStorage:", error);
+    }
+    
     if (savedTheme === "dark") {
       document.body.classList.add("dark-mode");
       themeIcon.textContent = "☀️";
@@ -50,7 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
     themeIcon.textContent = isDarkMode ? "☀️" : "🌙";
     
     // Save preference to localStorage
-    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+    try {
+      localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+    } catch (error) {
+      console.error("Failed to save theme preference:", error);
+    }
   }
 
   // Event listener for theme toggle button
