@@ -613,6 +613,21 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      <div class="social-share-container">
+        <button class="share-button twitter" data-activity="${name}" data-share-type="twitter" title="Share on Twitter/X">
+          𝕏
+        </button>
+        <button class="share-button facebook" data-activity="${name}" data-share-type="facebook" title="Share on Facebook">
+          f
+        </button>
+        <button class="share-button email" data-activity="${name}" data-share-type="email" title="Share via Email">
+          ✉
+        </button>
+        <button class="share-button copy-link" data-activity="${name}" data-share-type="copy" title="Copy Link">
+          🔗
+          <span class="copy-tooltip">Copied!</span>
+        </button>
+      </div>
     `;
 
     // Add click handlers for delete buttons
@@ -630,6 +645,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    // Add click handlers for social share buttons
+    const shareButtons = activityCard.querySelectorAll(".share-button");
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        handleShare(button.dataset.shareType, name, details);
+      });
+    });
 
     activitiesList.appendChild(activityCard);
   }
@@ -898,6 +922,61 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error signing up:", error);
     }
   });
+
+  // Handle social sharing
+  function handleShare(shareType, activityName, activityDetails) {
+    const currentUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${currentUrl}?activity=${encodeURIComponent(activityName)}`;
+    const description = activityDetails.description || 'Join us for this exciting activity!';
+    const shareText = `Check out ${activityName} at Mergington High School! ${description}`;
+    
+    switch (shareType) {
+      case "twitter":
+        // Twitter/X share
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+        window.open(twitterUrl, "_blank", "width=550,height=420");
+        break;
+        
+      case "facebook":
+        // Facebook share
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+        window.open(facebookUrl, "_blank", "width=550,height=420");
+        break;
+        
+      case "email":
+        // Email share
+        const emailSubject = `Activity at Mergington High School: ${activityName}`;
+        const emailBody = `${shareText}\n\nSchedule: ${formatSchedule(activityDetails)}\n\nView more details: ${shareUrl}`;
+        window.location.href = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+        break;
+        
+      case "copy":
+        // Copy link to clipboard
+        // Use attribute selector with exact match - no escaping needed for attribute values
+        const copyButton = document.querySelector(`button[data-activity="${activityName}"][data-share-type="copy"]`);
+        if (!copyButton) {
+          console.error("Copy button not found for activity:", activityName);
+          showMessage("Failed to copy link to clipboard", "error");
+          break;
+        }
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          // Find the tooltip element within the button
+          const tooltip = copyButton.querySelector(".copy-tooltip");
+          
+          // Show the tooltip
+          tooltip.classList.add("show");
+          
+          // Hide the tooltip after 2 seconds
+          setTimeout(() => {
+            tooltip.classList.remove("show");
+          }, 2000);
+        }).catch(err => {
+          console.error("Failed to copy:", err);
+          showMessage("Failed to copy link to clipboard", "error");
+        });
+        break;
+    }
+  }
 
   // Expose filter functions to window for future UI control
   window.activityFilters = {
