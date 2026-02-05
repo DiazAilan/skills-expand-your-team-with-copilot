@@ -883,7 +883,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleShare(shareType, activityName, activityDetails) {
     const currentUrl = window.location.origin + window.location.pathname;
     const shareUrl = `${currentUrl}?activity=${encodeURIComponent(activityName)}`;
-    const shareText = `Check out ${activityName} at Mergington High School! ${activityDetails.description}`;
+    const description = activityDetails.description || 'Join us for this exciting activity!';
+    const shareText = `Check out ${activityName} at Mergington High School! ${description}`;
     
     switch (shareType) {
       case "twitter":
@@ -907,7 +908,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
       case "copy":
         // Copy link to clipboard
-        const copyButton = document.querySelector(`[data-activity="${activityName}"][data-share-type="copy"]`);
+        const escapedActivityName = CSS.escape(activityName);
+        const copyButton = document.querySelector(`[data-activity="${escapedActivityName}"][data-share-type="copy"]`);
         navigator.clipboard.writeText(shareUrl).then(() => {
           // Find the tooltip element within the button
           const tooltip = copyButton.querySelector(".copy-tooltip");
